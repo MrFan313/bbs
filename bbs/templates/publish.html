@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>垃圾分类论坛_发帖页</title>
+	<meta name="keywords" content="关键字列表" />
+	<meta name="description" content="网页描述" />
+    {% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/public.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/publish.css' %}" />
+	<style type="text/css"></style>
+	<script type="text/javascript"></script>
+</head>
+<body>
+	<div class="header_wrap">
+		<div id="header" class="auto">
+			<div class="logo">垃圾分类</div>
+			<div class="nav">
+				<a class="hover" href="{% url 'home:index' %}">首页</a>
+			</div>
+			<div class="serarch">
+				<form>
+					<input class="keyword" type="text" name="keyword" placeholder="搜索其实很简单" />
+					<input class="submit" type="submit" name="submit" value="" />
+				</form>
+			</div>
+		    {% if is_login %}
+                <div class="login">
+                    <a href='#'>{{ name }}</a>&nbsp;
+                    <a href='{% url 'users:logout' %}'>退出</a>
+                </div>
+            {% else %}
+                <div class="login">
+                    <a href='{% url 'users:login' %}'>登录</a>&nbsp;
+                    <a href='{% url 'users:register' %}'>注册</a>
+                </div>
+            {% endif %}
+		</div>
+	</div>
+	<div style="margin-top:55px;"></div>
+	<div id="position" class="auto">
+		 <a href='{% url 'home:index' %}'>首页</a> &gt; <a href="{% url 'home:list' %}?cat_id={{ category.id }}">{{ category.name }}</a>
+	</div>
+	<div id="publish">
+		<form action="" method="post">
+            {% csrf_token %}
+			<select name="module_id">
+				{% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+				{% endfor %}
+
+			</select>
+			<input class="title" placeholder="请输入标题" name="title" type="text" />
+			<textarea name="content" class="content"></textarea>
+			<input class="publish" type="submit" name="submit" value="" />
+			<div style="clear:both;"></div>
+		</form>
+	</div>
+	<div id="footer" class="auto">
+		<div class="bottom">
+			<a>垃圾分类</a>
+		</div>
+		<div class="copyright">Powered by qiruihua ©2019 </div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<title>垃圾分类论坛_帖子详情页</title>
+	<meta name="keywords" content="关键字列表" />
+	<meta name="description" content="网页描述" />
+    {% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'css/public.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/show.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.pagination.css' %}" />
+	<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.pagination.min.js' %}"></script>
+	<style type="text/css"></style>
+	<script type="text/javascript"></script>
+</head>
+<body>
+	<div class="header_wrap">
+		<div id="header" class="auto">
+			<div class="logo">垃圾分类</div>
+			<div class="nav">
+				<a class="hover" href="{% url 'home:index' %}">首页</a>
+			</div>
+			<div class="serarch">
+				<form>
+
+					<input class="keyword" type="text" name="keyword" placeholder="搜索其实很简单" />
+					<input class="submit" type="submit" name="submit" value="" />
+				</form>
+			</div>
+			<div class="login">
+				{% if is_login %}
+                    <div class="login">
+                        <a href='#'>{{ name }}</a>&nbsp;
+                        <a href='{% url 'users:logout' %}'>退出</a>
+                    </div>
+                {% else %}
+                    <div class="login">
+                        <a href='{% url 'users:login' %}'>登录</a>&nbsp;
+                        <a href='{% url 'users:register' %}'>注册</a>
+                    </div>
+                {% endif %}
+			</div>
+		</div>
+	</div>
+	<div style="margin-top:55px;"></div>
+	<div id="position" class="auto">
+		 <a href='{% url 'home:index' %}'>首页</a> &gt; <a href="{% url 'home:list' %}?cat_id={{ category.id }}">{{ category.name }}</a> &gt;
+	</div>
+	<div id="main" class="auto">
+		<div class="wrap1">
+			<a class="btn reply" href="{% url 'home:reply' %}?article_id={{ article.id }}"></a>
+			<div style="clear:both;"></div>
+		</div>
+		<div class="wrapContent">
+			<div class="left">
+				<div class="face">
+					<a target="_blank" href="">
+						<img src="{% static 'image/2374101_middle.jpg' %}" />
+					</a>
+				</div>
+				<div class="name">
+					<a href="">{{ article.user.name }}</a>
+				</div>
+			</div>
+			<div class="right">
+				<div class="title">
+					<h2> {{ article.title }}</h2>
+					<span>阅读：{{ article.read_count }}&nbsp;|&nbsp;回复：{{ article.comments }}</span>
+					<div style="clear:both;"></div>
+				</div>
+				<div class="pubdate">
+					<span class="date">发布于：{{ article.publish_time }} </span>
+					<span class="floor" style="color:red;font-size:14px;font-weight:bold;">楼主</span>
+				</div>
+				<div class="content">
+					  {{ article.content }}
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+        {% for comment in comments %}
+            <div class="wrapContent">
+			<div class="left">
+				<div class="face">
+					<a target="_blank" href="">
+						<img src="{% static 'image/2374102_middle.jpg' %}" />
+					</a>
+				</div>
+				<div class="name">
+					<a href="">{{ comment.user.name }}</a>
+				</div>
+			</div>
+			<div class="right">
+
+				<div class="pubdate">
+					<span class="date">回复时间：{{ comment.create_time }}</span>
+					<span class="floor">{{ comment.floor }}楼&nbsp;|&nbsp;<a href="{% url 'home:quote' %}?comment_id={{ comment.id }}">引用</a></span>
+				</div>
+				<div class="content">
+					{% if comment.parent_id %}
+                        <div class="quote">
+                        <h2>引用{{ comment.parent.user.username }}发表的:</h2>
+                        {{ comment.parent.content }}
+                        </div>
+					{% endif %}
+                    {{ comment.content }}
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div class="wrapContent">
+			<div class="left">
+				<div class="face">
+					<a target="_blank" data-uid="2374101" href="">
+						<img src="{% static 'image/2374103_middle.jpg' %}" />
+					</a>
+				</div>
+				<div class="name">
+					<a class="J_user_card_show mr5" data-uid="2374101" href="">{{ comment.user.name }}</a>
+				</div>
+			</div>
+        {% endfor %}
+
+		<div class="wrap1">
+				<div class="pages">
+					<div id="pagination" class="page"></div>
+				</div>
+			<a class="btn reply" href="{% url 'home:reply' %}?article_id={{ article.id }}"></a>
+			<div style="clear:both;"></div>
+		</div>
+	</div>
+	<div id="footer" class="auto">
+		<div class="bottom">
+			<a>垃圾分类</a>
+		</div>
+		<div class="copyright">Powered by qiruihua ©2019 </div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function () {
+        $('#pagination').pagination({
+            currentPage:{{ page_num }},
+            totalPage: {{ total_page }},
+            callback:function (current) {
+                location.href = '?page=' + current;
+            }
+        })
+    });
+</script>

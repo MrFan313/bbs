@@ -1,0 +1,14 @@
+数据库说明
+新建数据库:create database db_bbs charset=utf8;
+新建mysql用户:create user FanYong identified by '123456';
+授权用户访问db_blog数据库:grant all on db_bbs.* to 'FanYong'@'%';
+授权结束后刷新特权:flush privileges;
+
+更新数据库:
+>>python manage.py makemigrations
+>>python manage.py migrate
+
+建立超级管理员:
+python manage.py createsuperuser
+admin
+admin123456
